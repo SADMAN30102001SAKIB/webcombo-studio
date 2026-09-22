@@ -4,6 +4,13 @@
   "main": "worker.js",
   "compatibility_date": "2025-01-01",
   "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "audio.autonovaq.com",
+      "custom_domain": true
+    }
+  ],
   "containers": [
     {
       "class_name": "WebComboContainer",

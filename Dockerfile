@@ -3,6 +3,7 @@ FROM node:20-slim
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    unzip \
     libnss3 \
     libatk1.0-0 \
     libatk-bridge2.0-0 \
