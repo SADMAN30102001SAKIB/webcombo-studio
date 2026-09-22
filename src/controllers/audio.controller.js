@@ -107,6 +107,10 @@ export async function processAudio(c) {
         status: "failed",
         error: err.message,
       });
+      jobService.broadcastEvent(jobId, {
+        step: "error",
+        message: err.message || "An unexpected error occurred during stem extraction.",
+      });
       console.error(`[Job ${jobId}] Failed:`, err.message);
     }
   })();
@@ -171,6 +175,10 @@ export async function applyReverb(c) {
       jobService.updateJob(jobId, {
         status: "failed",
         error: err.message,
+      });
+      jobService.broadcastEvent(jobId, {
+        step: "error",
+        message: err.message || "An unexpected error occurred during reverb synthesis.",
       });
       console.error(`[Job ${jobId}] Reverb failed:`, err.message);
     }

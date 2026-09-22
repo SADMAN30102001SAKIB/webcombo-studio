@@ -52,10 +52,11 @@ export async function separateAudio(
     track: targetTrack,
   });
 
-  const browser = await launchStealthBrowser();
+  let browser = null;
   let page = null;
 
   try {
+    browser = await launchStealthBrowser();
     page = await browser.newPage();
     await setupPageDownloads(page, config.downloadDir);
 

@@ -7,11 +7,12 @@ puppeteer.use(StealthPlugin());
 
 export async function launchStealthBrowser(options = {}) {
   const launchArgs = [
-    "--start-maximized",
     "--no-sandbox",
     "--disable-setuid-sandbox",
     "--disable-dev-shm-usage",
     "--disable-gpu",
+    "--no-first-run",
+    "--no-zygote",
     "--disable-blink-features=AutomationControlled",
     "--window-size=1920,1080",
   ];

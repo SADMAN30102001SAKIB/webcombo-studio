@@ -15,6 +15,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxrandr2 \
     libgbm1 \
     libasound2 \
+    libpango-1.0-0 \
+    libcairo2 \
+    libxfixes3 \
+    libxshmfence1 \
+    libx11-xcb1 \
     ca-certificates \
     fonts-liberation \
     && rm -rf /var/lib/apt/lists/*

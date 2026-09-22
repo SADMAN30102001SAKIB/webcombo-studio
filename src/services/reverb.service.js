@@ -30,10 +30,11 @@ export async function applySlowedReverb(
     message: "Launching browser engine for Slowed + Reverb processing...",
   });
 
-  const browser = await launchStealthBrowser();
+  let browser = null;
   let page = null;
 
   try {
+    browser = await launchStealthBrowser();
     page = await browser.newPage();
 
     onProgress({
