@@ -111,6 +111,9 @@ const errorElements = {
   recommendation: document.getElementById("error-recommendation"),
   networkRecommendation: document.getElementById("network-recommendation"),
   reverbRecommendation: document.getElementById("reverb-error-recommendation"),
+  screenshotCard: document.getElementById("error-screenshot-card"),
+  screenshotImg: document.getElementById("error-screenshot-img"),
+  screenshotLink: document.getElementById("error-screenshot-link"),
 };
 const errorRetryBtn = document.getElementById("error-retry-btn");
 
@@ -455,6 +458,7 @@ function handleProgressEvent(data) {
         errorElements,
         message,
         errorType || (isStemReady ? "REVERB_ERROR" : "SITE_ERROR"),
+        data.screenshot,
       );
       break;
   }
