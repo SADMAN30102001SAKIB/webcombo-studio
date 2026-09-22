@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebCombo - AI Stem Extractor & Slowed + Reverb Studio</title>
+    <meta
+      name="description"
+      content="Automate AI vocal separation and craft slowed and reverb audio with studio DSP effects." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <div class="app-container">
+      <header class="app-header">
+        <div class="logo-group">
+          <div class="logo-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2">
+              <path
+                d="M12 2v20M17 5v14M7 9v6M22 10v4M2 11v2"
+                stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="logo-text">
+            <h1>WebCombo <span>Studio</span></h1>
+            <p class="tagline">
+              AI Stem Separation &bull; Slowed + Reverb Synthesizer
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-card glass-panel">
+        <section id="upload-stage" class="stage-section active">
+          <div class="dropzone" id="dropzone">
+            <input
+              type="file"
+              id="file-input"
+              accept="audio/*,.mp3,.wav,.ogg,.flac,.m4a"
+              hidden />
+            <div class="dropzone-content">
+              <div class="upload-icon-wrapper">
+                <svg
+                  class="upload-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2">
+                  <path
+                    d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </div>
+              <h3>Drag & Drop your audio file here</h3>
+              <p class="dropzone-hint">
+                Supports MP3, WAV, FLAC, M4A, OGG (Up to 100MB)
+              </p>
+              <button type="button" class="btn btn-secondary" id="browse-btn">
+                Browse Files
+              </button>
+            </div>
+          </div>
+
+          <div class="file-preview-card hidden" id="file-preview-card">
+            <div class="file-meta">
+              <div class="audio-badge-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2">
+                  <path d="M9 18V5l12-2v13M9 9l12-2" />
+                  <circle cx="6" cy="18" r="3" />
+                  <circle cx="18" cy="16" r="3" />
+                </svg>
+              </div>
+              <div class="file-info">
+                <div class="file-name" id="preview-filename">song.mp3</div>
+                <div class="file-size" id="preview-filesize">4.2 MB</div>
+              </div>
+              <button
+                type="button"
+                class="btn-icon"
+                id="remove-file-btn"
+                title="Remove file">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            <div class="custom-player" id="local-player-wrap">
+              <audio id="local-audio-player" preload="metadata"></audio>
+              <button type="button" class="player-play-btn" title="Play">
+                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                <svg
+                  class="icon-pause hidden"
+                  viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <rect x="6" y="4" width="4" height="16" rx="1"></rect>
+                  <rect x="14" y="4" width="4" height="16" rx="1"></rect>
+                </svg>
+              </button>
+              <span class="player-time-current">0:00</span>
+              <div class="player-timeline-box">
+                <div class="player-timeline">
+                  <div class="player-progress-fill">
+                    <div class="player-progress-handle"></div>
+                  </div>
+                </div>
+              </div>
+              <span class="player-time-duration">0:00</span>
+              <button type="button" class="player-mute-btn" title="Mute">
+                <svg
+                  class="icon-volume"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                </svg>
+                <svg
+                  class="icon-muted hidden"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2">
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="options-container">
+            <label class="section-label">Select Stem to Extract:</label>
+            <div class="track-options">
+              <label class="track-radio-label active" data-track="vocal">
+                <input type="radio" name="track" value="vocal" checked />
+                <div class="radio-card">
+                  <div class="radio-dot purple"></div>
+                  <div class="radio-text">
+                    <span class="track-title"
+                      >Vocals Only
+                      <span class="badge-recommended">Default</span></span
+                    >
+                    <span class="track-desc">Clean isolated vocal track</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="track-radio-label" data-track="music">
+                <input type="radio" name="track" value="music" />
+                <div class="radio-card">
+                  <div class="radio-dot green"></div>
+                  <div class="radio-text">
+                    <span class="track-title">Music Only</span>
+                    <span class="track-desc">Clean instrumental beats</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="track-radio-label" data-track="both">
+                <input type="radio" name="track" value="both" />
+                <div class="radio-card">
+                  <div class="radio-dot dual"></div>
+                  <div class="radio-text">
+                    <span class="track-title">Music + Vocal</span>
+                    <span class="track-desc">Full stem package</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="combo-preset-card glass-subpanel">
+            <div class="combo-toggle-header">
+              <div class="combo-toggle-meta">
+                <div class="combo-title-row">
+                  <span class="badge-icon-pill purple">Combo Mode</span>
+                  <span class="combo-title">Auto-Apply Slowed + Reverb</span>
+                </div>
+                <p class="combo-desc">
+                  Automatically chain DSP audio synthesis immediately after stem
+                  separation completes.
+                </p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="auto-chain-toggle" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="upfront-reverb-box hidden" id="upfront-reverb-box">
+              <div class="studio-controls">
+                <div class="control-row toggle-row">
+                  <div class="control-meta">
+                    <span class="control-label">Slow by Pitch</span>
+                    <span class="control-hint"
+                      >Drop pitch alongside speed (recommended)</span
+                    >
+                  </div>
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      id="upfront-speed-mode-toggle"
+                      checked />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+
+                <div class="control-row slider-row">
+                  <div class="slider-meta">
+                    <span class="control-label" id="upfront-speed-label-text"
+                      >Speed (Semitones)</span
+                    >
+                    <span class="value-badge" id="upfront-val-speed">-2</span>
+                  </div>
+                  <input
+                    type="range"
+                    id="upfront-slider-speed"
+                    class="studio-range"
+                    min="-12"
+                    max="0"
+                    value="-2"
+                    step="1" />
+                </div>
+
+                <div class="control-row slider-row">
+                  <div class="slider-meta">
+                    <span class="control-label">Reverb Mix</span>
+                    <span class="value-badge" id="upfront-val-reverb">35%</span>
+                  </div>
+                  <input
+                    type="range"
+                    id="upfront-slider-reverb"
+                    class="studio-range"
+                    min="0"
+                    max="60"
+                    value="35"
+                    step="1" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="actions-wrapper">
+            <button
+              type="button"
+              class="btn btn-primary btn-large btn-action"
+              id="start-btn"
+              disabled>
+              <span class="btn-text">Extract Audio Stems</span>
+              <svg
+                class="btn-arrow"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+        </section>
+
+        <section id="processing-stage" class="stage-section hidden">
+          <div class="processing-header">
+            <div class="loader-orbit">
+              <div class="orbit-center"></div>
+              <div class="orbit-ring"></div>
+            </div>
+            <h2 id="current-step-title">Processing Audio...</h2>
+            <p id="current-step-desc">
+              Please keep this tab open while the AI isolates your track.
+            </p>
+          </div>
+
+          <div class="stepper-container">
+            <div class="step-item" id="step-upload">
+              <div class="step-circle">
+                <svg
+                  class="check-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="step-num">1</span>
+              </div>
+              <div class="step-label">Upload to Engine</div>
+            </div>
+
+            <div class="step-line" id="line-1"></div>
+
+            <div class="step-item" id="step-ai">
+              <div class="step-circle">
+                <svg
+                  class="check-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="step-num">2</span>
+              </div>
+              <div class="step-label">AI Stem Separation</div>
+            </div>
+
+            <div class="step-line" id="line-2"></div>
+
+            <div class="step-item" id="step-extract">
+              <div class="step-circle">
+                <svg
+                  class="check-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="step-num">3</span>
+              </div>
+              <div class="step-label">Extract & Save</div>
+            </div>
+
+            <div class="step-line" id="line-3"></div>
+
+            <div class="step-item" id="step-ready">
+              <div class="step-circle">
+                <svg
+                  class="check-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span class="step-num">4</span>
+              </div>
+              <div class="step-label">Stem Ready</div>
+            </div>
+          </div>
+
+          <div class="terminal-wrapper">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+              </div>
+              <span class="terminal-title">LIVE AUTOMATION LOGS</span>
+            </div>
+            <div class="terminal-body" id="log-console">
+              <div class="log-line info">
+                [System] Ready for automation stream...
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="result-stage" class="stage-section hidden">
+          <div class="studio-pipeline">
+            <div class="stem-result-box glass-subpanel">
+              <div class="subpanel-header text-center">
+                <div class="badge-icon-pill green">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Step 1 Complete</span>
+                </div>
+                <h3>Extracted Vocal Stem</h3>
+                <div class="file-pill">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M9 18V5l12-2v13M9 9l12-2"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                  </svg>
+                  <span id="result-filename">vocal.mp3</span>
+                </div>
+              </div>
+
+              <div class="custom-player" id="stem-player-wrap">
+                <audio id="result-audio-player" preload="auto"></audio>
+                <button type="button" class="player-play-btn" title="Play">
+                  <svg
+                    class="icon-play"
+                    viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                  <svg
+                    class="icon-pause hidden"
+                    viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <rect x="6" y="4" width="4" height="16" rx="1"></rect>
+                    <rect x="14" y="4" width="4" height="16" rx="1"></rect>
+                  </svg>
+                </button>
+                <span class="player-time-current">0:00</span>
+                <div class="player-timeline-box">
+                  <div class="player-timeline">
+                    <div class="player-progress-fill">
+                      <div class="player-progress-handle"></div>
+                    </div>
+                  </div>
+                </div>
+                <span class="player-time-duration">0:00</span>
+                <button type="button" class="player-mute-btn" title="Mute">
+                  <svg
+                    class="icon-volume"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2">
+                    <polygon
+                      points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                  </svg>
+                  <svg
+                    class="icon-muted hidden"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2">
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                    <polygon
+                      points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="action-center-row">
+                <a
+                  id="download-track-btn"
+                  class="btn btn-secondary btn-action"
+                  href="#"
+                  download>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2">
+                    <path
+                      d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
+                  </svg>
+                  <span>Download Stem MP3 🎵</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="reverb-studio-box glass-subpanel">
+              <div class="subpanel-header text-center">
+                <div class="badge-icon-pill purple">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2">
+                    <polygon
+                      points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <span>Step 2</span>
+                </div>
+                <h3>Slowed + Reverb Studio</h3>
+                <p class="subpanel-desc">
+                  Customize the tempo, pitch shifting, and ambient reverb space.
+                </p>
+              </div>
+
+              <div class="studio-controls">
+                <div class="control-row toggle-row">
+                  <div class="control-meta">
+                    <span class="control-label">Slow by Pitch</span>
+                    <span class="control-hint"
+                      >Drop pitch alongside speed (recommended)</span
+                    >
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="speed-mode-toggle" checked />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+
+                <div class="control-row slider-row">
+                  <div class="slider-meta">
+                    <span class="control-label" id="speed-label-text"
+                      >Speed (Semitones)</span
+                    >
+                    <span class="value-badge" id="val-speed">-2</span>
+                  </div>
+                  <input
+                    type="range"
+                    id="slider-speed"
+                    class="studio-range"
+                    min="-12"
+                    max="0"
+                    value="-2"
+                    step="1" />
+                </div>
+
+                <div class="control-row slider-row">
+                  <div class="slider-meta">
+                    <span class="control-label">Reverb Mix</span>
+                    <span class="value-badge" id="val-reverb">35%</span>
+                  </div>
+                  <input
+                    type="range"
+                    id="slider-reverb"
+                    class="studio-range"
+                    min="0"
+                    max="60"
+                    value="35"
+                    step="1" />
+                </div>
+              </div>
+
+              <div class="action-center-row">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-large btn-glow btn-action"
+                  id="apply-reverb-btn">
+                  <span>Apply Slowed + Reverb 🚀</span>
+                </button>
+              </div>
+            </div>
+
+            <div
+              class="reverb-progress-card glass-subpanel hidden"
+              id="reverb-progress-card">
+              <div class="processing-header">
+                <div class="loader-orbit">
+                  <div class="orbit-center"></div>
+                  <div class="orbit-ring"></div>
+                </div>
+                <h3 id="reverb-status-title">Synthesizing Audio...</h3>
+                <p id="reverb-status-message">
+                  Applying DSP time-stretching and acoustic impulse reverb...
+                </p>
+              </div>
+
+              <div class="stepper-container">
+                <div class="step-item" id="reverb-step-load">
+                  <div class="step-circle">
+                    <svg
+                      class="check-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span class="step-num">1</span>
+                  </div>
+                  <div class="step-label">Load Stem</div>
+                </div>
+
+                <div class="step-line" id="reverb-line-1"></div>
+
+                <div class="step-item" id="reverb-step-dsp">
+                  <div class="step-circle">
+                    <svg
+                      class="check-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span class="step-num">2</span>
+                  </div>
+                  <div class="step-label">Configure DSP</div>
+                </div>
+
+                <div class="step-line" id="reverb-line-2"></div>
+
+                <div class="step-item" id="reverb-step-synth">
+                  <div class="step-circle">
+                    <svg
+                      class="check-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span class="step-num">3</span>
+                  </div>
+                  <div class="step-label">Audio Synthesis</div>
+                </div>
+
+                <div class="step-line" id="reverb-line-3"></div>
+
+                <div class="step-item" id="reverb-step-ready">
+                  <div class="step-circle">
+                    <svg
+                      class="check-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span class="step-num">4</span>
+                  </div>
+                  <div class="step-label">Master Ready</div>
+                </div>
+              </div>
+
+              <div class="terminal-wrapper" style="margin-top: 1.5rem">
+                <div class="terminal-header">
+                  <div class="terminal-dots">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                  </div>
+                  <span class="terminal-title">LIVE SYNTHESIS LOGS</span>
+                </div>
+                <div class="terminal-body" id="reverb-log-console">
+                  <div class="log-line info">
+                    [System] Initializing SlowedReverb DSP engine...
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="final-master-card glass-subpanel hidden"
+              id="final-master-card">
+              <div class="subpanel-header text-center">
+                <div class="badge-icon-pill gold">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                  <span>Final Master Ready</span>
+                </div>
+                <h3>Slowed + Reverb Masterpiece</h3>
+                <div class="file-pill">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M9 18V5l12-2v13M9 9l12-2"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                  </svg>
+                  <span id="final-master-filename">SlowedReverb_vocal.mp3</span>
+                </div>
+              </div>
+
+              <div class="custom-player" id="final-player-wrap">
+                <audio id="final-audio-player" preload="auto"></audio>
+                <button
+                  type="button"
+                  class="player-play-btn gold-glow"
+                  title="Play">
+                  <svg
+                    class="icon-play"
+                    viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                  <svg
+                    class="icon-pause hidden"
+                    viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <rect x="6" y="4" width="4" height="16" rx="1"></rect>
+                    <rect x="14" y="4" width="4" height="16" rx="1"></rect>
+                  </svg>
+                </button>
+                <span class="player-time-current">0:00</span>
+                <div class="player-timeline-box">
+                  <div class="player-timeline">
+                    <div class="player-progress-fill gold-fill">
+                      <div class="player-progress-handle"></div>
+                    </div>
+                  </div>
+                </div>
+                <span class="player-time-duration">0:00</span>
+                <button type="button" class="player-mute-btn" title="Mute">
+                  <svg
+                    class="icon-volume"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2">
+                    <polygon
+                      points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                  </svg>
+                  <svg
+                    class="icon-muted hidden"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2">
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                    <polygon
+                      points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="action-center-row">
+                <a
+                  id="download-master-btn"
+                  class="btn btn-primary btn-large btn-action"
+                  href="#"
+                  download>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2">
+                    <path
+                      d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
+                  </svg>
+                  <span>Download Masterpiece MP3 🎵</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="reset-row">
+              <button type="button" class="btn btn-ghost" id="reset-btn">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2">
+                  <path
+                    d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                  <path d="M21 3v5h-5"></path>
+                  <path
+                    d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                  <path d="M8 16H3v5"></path>
+                </svg>
+                <span>Process Another Song</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section id="error-stage" class="stage-section hidden">
+          <div class="error-banner">
+            <div class="error-icon-box">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <div class="error-content">
+              <h3 id="error-title">Automation Stopped</h3>
+              <p id="error-message">An unexpected error occurred.</p>
+              <div id="error-recommendation" class="error-tips hidden">
+                <strong>💡 Free limit reached for this IP:</strong>
+                <ul>
+                  <li>
+                    VocalRemover limits free usage to 1-2 files per IP address.
+                  </li>
+                  <li>
+                    Simply switch or reconnect your
+                    <strong>VPN / Cloudflare One</strong> location.
+                  </li>
+                  <li>Click <strong>Try Again</strong> to resume.</li>
+                </ul>
+              </div>
+              <div id="network-recommendation" class="error-tips hidden">
+                <strong>💡 VocalRemover Network Error:</strong>
+                <ul>
+                  <li>
+                    VocalRemover reported:
+                    <em
+                      >"Network error occured, check your internet
+                      connection."</em
+                    >
+                  </li>
+                  <li>
+                    This happens when VocalRemover's upload endpoint drops the
+                    connection or blocks the transfer.
+                  </li>
+                  <li>
+                    Reconnect your network or VPN, then click
+                    <strong>Try Again</strong>.
+                  </li>
+                </ul>
+              </div>
+              <div id="reverb-error-recommendation" class="error-tips hidden">
+                <strong>💡 Slowed + Reverb Notice:</strong>
+                <ul>
+                  <li>
+                    The audio synthesis engine timed out or reported a temporary
+                    rendering error.
+                  </li>
+                  <li>
+                    Your extracted stem file is preserved and completely safe.
+                  </li>
+                  <li>
+                    Click <strong>Try Again</strong> to return to the studio
+                    controls and re-apply.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="actions-wrapper" style="margin-top: 1.5rem">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="error-retry-btn">
+              Try Again
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <p>
+          Automated Audio Pipeline &bull; VocalRemover.org &bull;
+          SlowedReverb.com
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
