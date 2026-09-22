@@ -97,7 +97,6 @@ export async function separateAudio(
       "[VocalRemover] File uploaded. Checking for server response...",
     );
     await sleep(2000);
-    safeUnlink(resolvedInputPath);
 
     const uploadStatus = await page.evaluate(() => {
       const text = document.body ? document.body.innerText || "" : "";
@@ -343,7 +342,7 @@ export async function separateAudio(
     let cleanMessage = err.message;
     if (err.name === "TimeoutError" || /timeout/i.test(err.message)) {
       cleanMessage =
-        "VocalRemover processing timed out after 60 seconds. The AI engine took too long or stalled. Please try again.";
+        "VocalRemover processing timed out. The AI engine took too long or stalled. Please try again.";
     }
     console.error(`[VocalRemover] Error during automation: ${cleanMessage}`);
 

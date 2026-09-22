@@ -13,7 +13,7 @@ export const config = {
   publicDir: path.resolve(rootDir, "public"),
   url: process.env.VOCAL_REMOVER_URL || "https://vocalremover.org",
   headless: process.env.HEADLESS !== "false",
-  processingTimeout: parseInt(process.env.PROCESSING_TIMEOUT || "60000", 10),
+  processingTimeout: parseInt(process.env.PROCESSING_TIMEOUT || "240000", 10),
   downloadTrack: process.env.DOWNLOAD_TRACK || "vocal",
   maxFileSize: 100 * 1024 * 1024,
   slowedReverbUrl: process.env.SLOWED_REVERB_URL || "https://slowedreverb.com",
