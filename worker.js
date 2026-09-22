@@ -2,6 +2,7 @@ import { Container } from "@cloudflare/containers";
 
 export class WebComboContainer extends Container {
   defaultPort = 3000;
+  sleepAfter = "5m";
 }
 
 export default {
