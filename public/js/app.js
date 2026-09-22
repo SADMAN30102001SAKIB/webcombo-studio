@@ -91,6 +91,7 @@ const finalMasterCard = document.getElementById("final-master-card");
 const finalMasterFilename = document.getElementById("final-master-filename");
 const finalAudioPlayer = document.getElementById("final-audio-player");
 const downloadMasterBtn = document.getElementById("download-master-btn");
+const reverbReconfigureBtn = document.getElementById("reverb-reconfigure-btn");
 
 const autoChainToggle = document.getElementById("auto-chain-toggle");
 const upfrontReverbBox = document.getElementById("upfront-reverb-box");
@@ -559,6 +560,7 @@ applyReverbBtn.addEventListener("click", async () => {
   applyReverbBtn.setAttribute("disabled", "true");
   const reverbPanel = document.querySelector(".reverb-studio-box");
   if (reverbPanel) reverbPanel.classList.add("hidden");
+  if (finalMasterCard) finalMasterCard.classList.add("hidden");
   reverbProgressCard.classList.remove("hidden");
   if (reverbLogConsole) {
     reverbLogConsole.innerHTML = "";
@@ -589,6 +591,24 @@ applyReverbBtn.addEventListener("click", async () => {
     displayError(errorElements, err.message, "REVERB_ERROR");
   }
 });
+
+if (reverbReconfigureBtn) {
+  reverbReconfigureBtn.addEventListener("click", () => {
+    if (finalAudioPlayer && !finalAudioPlayer.paused) {
+      finalAudioPlayer.pause();
+    }
+    isReverbTriggered = false;
+    applyReverbBtn.removeAttribute("disabled");
+    const stemPanel = document.querySelector(".stem-result-box");
+    const reverbPanel = document.querySelector(".reverb-studio-box");
+    if (stemPanel) stemPanel.classList.remove("hidden");
+    if (reverbPanel) {
+      reverbPanel.classList.remove("hidden");
+      reverbPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    if (reverbProgressCard) reverbProgressCard.classList.add("hidden");
+  });
+}
 
 browseBtn.addEventListener("click", e => {
   e.stopPropagation();
