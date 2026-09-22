@@ -121,15 +121,11 @@ export function displayError(errorElements, message, errorType, screenshotUrl) {
   if (networkRecommendation) networkRecommendation.classList.add("hidden");
   if (reverbRecommendation) reverbRecommendation.classList.add("hidden");
 
-  if (screenshotCard) {
-    if (screenshotUrl) {
-      if (screenshotImg) screenshotImg.src = `${screenshotUrl}?t=${Date.now()}`;
-      if (screenshotLink)
-        screenshotLink.href = `${screenshotUrl}?t=${Date.now()}`;
-      screenshotCard.classList.remove("hidden");
-    } else {
-      screenshotCard.classList.add("hidden");
-    }
+  if (screenshotCard && screenshotUrl) {
+    if (screenshotImg) screenshotImg.src = `${screenshotUrl}?t=${Date.now()}`;
+    if (screenshotLink)
+      screenshotLink.href = `${screenshotUrl}?t=${Date.now()}`;
+    screenshotCard.classList.remove("hidden");
   }
 
   if (

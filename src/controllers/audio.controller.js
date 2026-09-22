@@ -107,9 +107,11 @@ export async function processAudio(c) {
         status: "failed",
         error: err.message,
       });
+      const errorScreenshotPath = path.join(config.downloadDir, "error-screenshot.png");
       jobService.broadcastEvent(jobId, {
         step: "error",
         message: err.message || "An unexpected error occurred during stem extraction.",
+        screenshot: fs.existsSync(errorScreenshotPath) ? "/downloads/error-screenshot.png" : undefined,
       });
       console.error(`[Job ${jobId}] Failed:`, err.message);
     }
@@ -176,9 +178,11 @@ export async function applyReverb(c) {
         status: "failed",
         error: err.message,
       });
+      const reverbErrorScreenshot = path.join(config.downloadDir, "slowed-error.png");
       jobService.broadcastEvent(jobId, {
         step: "error",
         message: err.message || "An unexpected error occurred during reverb synthesis.",
+        screenshot: fs.existsSync(reverbErrorScreenshot) ? "/downloads/slowed-error.png" : undefined,
       });
       console.error(`[Job ${jobId}] Reverb failed:`, err.message);
     }

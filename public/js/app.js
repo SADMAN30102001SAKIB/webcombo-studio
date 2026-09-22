@@ -273,6 +273,12 @@ function clearSelectedFile() {
   const reverbBox = document.querySelector(".reverb-studio-box");
   if (stemBox) stemBox.classList.remove("hidden");
   if (reverbBox) reverbBox.classList.remove("hidden");
+  if (errorElements.screenshotCard) {
+    errorElements.screenshotCard.classList.add("hidden");
+  }
+  if (errorElements.screenshotImg) {
+    errorElements.screenshotImg.src = "";
+  }
 }
 
 function updateSpeedSliderMode() {
