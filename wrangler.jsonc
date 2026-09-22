@@ -15,7 +15,8 @@
     {
       "class_name": "WebComboContainer",
       "image": "./Dockerfile",
-    },
+      "instance_type": "basic"
+    }
   ],
   "durable_objects": {
     "bindings": [

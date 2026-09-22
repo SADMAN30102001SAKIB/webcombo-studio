@@ -23,7 +23,9 @@ RUN corepack enable && corepack prepare pnpm@12.5.1 --activate
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile \
+    && rm -rf /root/.local/share/pnpm/store \
+    && rm -rf /root/.cache/puppeteer/chrome-headless-shell
 
 COPY . .
 
