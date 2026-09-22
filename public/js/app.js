@@ -18,6 +18,7 @@ let currentJobId = null;
 let activeEventSource = null;
 let selectedTrack = "vocal";
 let isStemReady = false;
+let isReverbTriggered = false;
 
 const dropzone = document.getElementById("dropzone");
 const fileInput = document.getElementById("file-input");
@@ -253,6 +254,7 @@ function handleFileSelection(file) {
 function clearSelectedFile() {
   selectedFile = null;
   isStemReady = false;
+  isReverbTriggered = false;
   fileInput.value = "";
   resetCustomPlayer(document.getElementById("local-player-wrap"));
   resetCustomPlayer(document.getElementById("stem-player-wrap"));
@@ -347,7 +349,8 @@ function handleProgressEvent(data) {
       downloadTrackBtn.href = `/api/download/${currentJobId}?type=stem`;
       downloadTrackBtn.download = fileName;
 
-      if (autoChainToggle && autoChainToggle.checked) {
+      if (autoChainToggle && autoChainToggle.checked && !isReverbTriggered) {
+        isReverbTriggered = true;
         const reverbPanel = document.querySelector(".reverb-studio-box");
         if (reverbPanel) reverbPanel.classList.add("hidden");
         reverbProgressCard.classList.remove("hidden");
@@ -398,7 +401,7 @@ function handleProgressEvent(data) {
     case "reverb_uploading":
       reverbProgressCard.classList.remove("hidden");
       updateReverbStepper(reverbStepper, data.step);
-      reverbStatusTitle.textContent = "Ingesting Stem Audio...";
+      reverbStatusTitle.textContent = "Uploading Audio to Engine...";
       reverbStatusMessage.textContent = message;
       break;
 
@@ -546,7 +549,8 @@ if (upfrontSliderReverb) {
 }
 
 applyReverbBtn.addEventListener("click", async () => {
-  if (!currentJobId) return;
+  if (!currentJobId || isReverbTriggered) return;
+  isReverbTriggered = true;
 
   applyReverbBtn.setAttribute("disabled", "true");
   const reverbPanel = document.querySelector(".reverb-studio-box");
@@ -628,6 +632,7 @@ trackLabels.forEach(label => {
 startBtn.addEventListener("click", async () => {
   if (!selectedFile) return;
 
+  isReverbTriggered = false;
   showStage(allStagesList, stages.processing);
   logConsole.innerHTML = "";
   appendLog(

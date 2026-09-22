@@ -45,7 +45,7 @@ export async function applySlowedReverb(
 
     onProgress({
       step: 'reverb_uploading',
-      message: 'Loading stem track into audio synthesis engine...'
+      message: 'Uploading stem audio to SlowedReverb engine...'
     });
 
     const fileInput = await page.$('#audio-upload');

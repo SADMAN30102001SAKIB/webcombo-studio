@@ -102,13 +102,6 @@ export async function processAudio(c) {
         stemPath: resultPath,
         resultPath
       });
-
-      jobService.broadcastEvent(jobId, {
-        step: 'completed',
-        stage: 'stem',
-        message: 'Stem extraction completed successfully.',
-        fileName: path.basename(resultPath)
-      });
     } catch (err) {
       jobService.updateJob(jobId, {
         status: 'failed',
