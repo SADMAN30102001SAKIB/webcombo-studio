@@ -3,34 +3,22 @@ FROM node:20-slim
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    unzip \
-    libnss3 \
-    libatk1.0-0 \
-    libatk-bridge2.0-0 \
-    libcups2 \
-    libdrm2 \
-    libxkbcommon0 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxrandr2 \
-    libgbm1 \
-    libasound2 \
-    libpango-1.0-0 \
-    libcairo2 \
-    libxfixes3 \
-    libxshmfence1 \
-    libx11-xcb1 \
-    ca-certificates \
+    chromium \
     fonts-liberation \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p uploads downloads
 
 RUN corepack enable && corepack prepare pnpm@12.5.1 --activate
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
 RUN pnpm install --frozen-lockfile \
-    && rm -rf /root/.local/share/pnpm/store \
-    && rm -rf /root/.cache/puppeteer/chrome-headless-shell
+    && rm -rf /root/.local/share/pnpm/store
 
 COPY . .
 
